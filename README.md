@@ -1,2 +1,2 @@
 # Zombie-Controller
-Simple Zombie Controller Script using Navmesh, no Raycast.
+For those who will use physical bullets, it is a simple Zombie Controller script without Raycast.
