@@ -4,82 +4,82 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ZombiController : MonoBehaviour
+public class ZombieController : MonoBehaviour
 {
-
+    // NavMesh Agent
     private NavMeshAgent agent;
-    private Transform hedef;
-    //public float takipHizi = 3.5f;
-    public float saldiriMesafesi = 1.5f;
+
+    // Target transform
+    private Transform target;
+    //public float trackingSpeed = 3.5f;
+    public float attackRange = 1.5f;
     
-    public float takipMesafesi = 5f;
+    public float trackingDistance = 5f;
 
-    public float healty=99;
+    public float health = 99;
 
-    void Start() 
+    void Start()
     {
+        // Define the agent variable to the "NavMeshAgent" component.
         agent = GetComponent<NavMeshAgent>();
-        hedef = GameObject.FindGameObjectWithTag("Player").transform;
+
+        // Define the "Target" variable to the Transform variable of the object with the "Player" tag in the scene.
+        target = GameObject.FindGameObjectWithTag("Player").transform;
     }
-    void FixedUpdate() 
+    
+    void FixedUpdate()
     {
-        
+        // Empty FixedUpdate function
     }
+    
     void Update()
     {
         Death();
-    /////////////////////////////////////////////////////////////////////////////////////
-        if (hedef != null)
+        
+        if (target != null)
         {
-            float mesafe = Vector3.Distance(transform.position, hedef.position);
+            float distance = Vector3.Distance(transform.position, target.position);
             
-            if (mesafe > saldiriMesafesi)
+            if (distance > attackRange)
             {
-                if (mesafe < takipMesafesi) 
+                if (distance < trackingDistance)
                 {
-                    TakipEt();
+                    Chase();
                 }
                 else
                 {
-                    Durdur(); 
-                    
-                    
+                    StopChasing();
                 }
             }
-            
         }
     }
 
-    void TakipEt()
+    void Chase()
     {
-        agent.isStopped=false;
-        agent.SetDestination(hedef.position);
+        agent.isStopped = false;
+        agent.SetDestination(target.position);
     }
 
-     void Durdur()
+    void StopChasing()
     {
         agent.isStopped = true;
     }
 
-     void Death()
-     {
-        //healty=Mathf.Clamp(healty,0,99);
-        if (healty<=0)
+    void Death()
+    {
+        //health = Mathf.Clamp(health, 0, 99);
+        if (health <= 0)
         {
             Destroy(this.gameObject);
         }
-     }
+    }
 
-    private void OnTriggerEnter(Collider other) 
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("bullet"))
         {
-            
             Destroy(other.gameObject);
-            healty-=33;
-            
+            health -= 33;
         }
-        
-        
     }
 }
